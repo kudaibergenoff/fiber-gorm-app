@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${APP_PORT}:8080
+    restart: on-failure
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    container_name: fiber_app
+    networks:
+      - task_app
+  db:
+    image: postgres:15.1-alpine
+    restart: always
+    ports:
+      - "54322:5432"
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB} -h 127.0.0.1 -p 5432" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./database/postgres/data:/var/lib/postgresql/data
+    container_name: fiber_app_db
+    networks:
+      - fiber_app
+volumes:
+  db:
+    driver: local
+
+networks:
+  fiber_app:
+    driver: bridge

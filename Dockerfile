@@ -7,7 +7,7 @@ COPY ../../go.sum .
 
 RUN go mod download
 
-COPY ../.. .
+COPY .. .
 
 RUN CGO_ENABLED=0 go build -a -installsuffix cgo -o fiberApp ./cmd/main.go
 

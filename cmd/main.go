@@ -15,7 +15,7 @@ func main() {
 	app.Use(logger.New())
 	app.Use(cors.New())
 	router.SetupRoutes(app)
-	// handle unavailable route
+	// not found route
 	app.Use(func(c *fiber.Ctx) error {
 		return c.SendStatus(404)
 	})

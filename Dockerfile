@@ -1,4 +1,4 @@
-FROM golang:1.20-alpine3.17 as builder
+FROM golang:1.21-alpine3.19 as builder
 
 WORKDIR /build
 
@@ -10,7 +10,6 @@ RUN go mod download
 COPY .. .
 
 RUN CGO_ENABLED=0 go build -a -installsuffix cgo -o fiberApp ./cmd/main.go
-
 
 FROM alpine:latest
 

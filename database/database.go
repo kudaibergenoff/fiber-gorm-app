@@ -21,7 +21,6 @@ var DB Dbinstance
 // Connect function
 func Connect() {
 	p := config.Config("DB_PORT")
-	// because our config function returns a string, we are parsing our      str to int here
 	port, err := strconv.ParseUint(p, 10, 32)
 	if err != nil {
 		fmt.Println("Error parsing str to int")
@@ -31,12 +30,12 @@ func Connect() {
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
-		log.Fatal("Failed to connect to database. \n", err)
+		log.Fatal("Не удалось подключиться к бд. \n", err)
 		os.Exit(2)
 	}
-	log.Println("Connected")
+	log.Println("Подключено")
 	db.Logger = logger.Default.LogMode(logger.Info)
-	log.Println("running migrations")
+	log.Println("запуск миграции")
 	err = db.AutoMigrate(&models.User{})
 	if err != nil {
 		return
